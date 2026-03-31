@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Form, Input, Button, Card, message, Space, Typography } from 'antd';
+import { Form, Input, Button, Card, message, Space, Typography, ColorPicker, Row, Col, Divider } from 'antd';
+import type { Color } from 'antd/es/color-picker';
 import { apiClient } from '../../api';
 import type { SiteConfig, UpdateSiteConfigRequest } from '../../types';
 
@@ -8,7 +9,6 @@ const { Title, Text } = Typography;
 export default function SiteConfigPage() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [config, setConfig] = useState<SiteConfig | null>(null);
 
   useEffect(() => {
     loadConfig();
@@ -17,7 +17,6 @@ export default function SiteConfigPage() {
   const loadConfig = async () => {
     try {
       const data = await apiClient.getSiteConfig();
-      setConfig(data);
       form.setFieldsValue({
         primary_color: data.primary_color,
         secondary_color: data.secondary_color,
@@ -39,25 +38,76 @@ export default function SiteConfigPage() {
     }
   };
 
-  const handleSubmit = async (values: UpdateSiteConfigRequest) => {
+  const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
-      await apiClient.updateAdminSiteConfig(values);
-      message.success('Configuration updated successfully! Refresh the page to see changes.');
+      // Check if admin is logged in
+      const sessionToken = localStorage.getItem('admin_session_token');
+      if (!sessionToken) {
+        message.error('You must be logged in as admin to update configuration');
+        setLoading(false);
+        return;
+      }
+
+      const updateData: UpdateSiteConfigRequest = {};
+      
+      // Convert Color objects to hex strings
+      Object.keys(values).forEach(key => {
+        const value = values[key];
+        if (value && typeof value === 'object' && 'toHexString' in value) {
+          updateData[key as keyof UpdateSiteConfigRequest] = value.toHexString();
+        } else if (value) {
+          updateData[key as keyof UpdateSiteConfigRequest] = value;
+        }
+      });
+
+      await apiClient.updateAdminSiteConfig(updateData);
+      message.success('Configuration updated! Refresh the page to see changes.');
       loadConfig();
-    } catch (error) {
-      message.error('Failed to update configuration');
+    } catch (error: any) {
+      if (error?.response?.status === 401) {
+        message.error('Session expired. Please login again.');
+      } else {
+        message.error('Failed to update configuration');
+      }
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
+  const ColorFormItem = ({ label, name, description }: { label: string; name: string; description?: string }) => (
+    <Form.Item
+      label={label}
+      name={name}
+      extra={description}
+      getValueFromEvent={(color: Color) => color?.toHexString()}
+      getValueProps={(value) => ({ value })}
+    >
+      <ColorPicker
+        showText
+        format="hex"
+        size="large"
+        presets={[
+          {
+            label: 'Recommended',
+            colors: [
+              '#0ea5e9', '#06b6d4', '#8b5cf6', '#f59e0b',
+              '#10b981', '#ef4444', '#f97316', '#84cc16',
+              '#ec4899', '#6366f1', '#14b8a6', '#f43f5e',
+              '#1a1a1a', '#64748b', '#fafbfc', '#ffffff',
+            ],
+          },
+        ]}
+      />
+    </Form.Item>
+  );
+
   return (
-    <div style={{ padding: '24px', maxWidth: '800px', margin: '0 auto' }}>
-      <Title level={2}>Site Configuration</Title>
+    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <Title level={2}>🎨 Site Configuration</Title>
       <Text type="secondary">
-        Configure theme colors and favicon. Changes will be applied on next page load.
+        Customize your site's theme colors and favicon. Changes take effect after refreshing the page.
       </Text>
 
       <Card style={{ marginTop: '24px' }}>
@@ -66,124 +116,137 @@ export default function SiteConfigPage() {
           layout="vertical"
           onFinish={handleSubmit}
         >
-          <Title level={4}>Brand Colors</Title>
-          <Space direction="vertical" style={{ width: '100%' }} size="large">
-            <Form.Item
-              label="Primary Color"
-              name="primary_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color (e.g., #0ea5e9)' }]}
-            >
-              <Input placeholder="#0ea5e9" />
-            </Form.Item>
+          <Title level={4}>🎯 Brand Colors</Title>
+          <Text type="secondary" style={{ display: 'block', marginBottom: '16px' }}>
+            Main colors that define your brand identity
+          </Text>
+          <Row gutter={[24, 16]}>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Primary Color" 
+                name="primary_color"
+                description="Main brand color used for buttons and highlights"
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Secondary Color" 
+                name="secondary_color"
+                description="Supporting brand color"
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Accent Color" 
+                name="accent_color"
+                description="Accent color for special elements"
+              />
+            </Col>
+          </Row>
 
-            <Form.Item
-              label="Secondary Color"
-              name="secondary_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#06b6d4" />
-            </Form.Item>
+          <Divider />
+          <Title level={4}>✨ Semantic Colors</Title>
+          <Text type="secondary" style={{ display: 'block', marginBottom: '16px' }}>
+            Colors that convey meaning and status
+          </Text>
+          <Row gutter={[24, 16]}>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Promo Color" 
+                name="promo_color"
+                description="Used for promotional badges and offers"
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Success Color" 
+                name="success_color"
+                description="Indicates successful actions"
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Warning Color" 
+                name="warning_color"
+                description="Indicates warnings or caution"
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Error Color" 
+                name="error_color"
+                description="Indicates errors or problems"
+              />
+            </Col>
+          </Row>
 
-            <Form.Item
-              label="Accent Color"
-              name="accent_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#8b5cf6" />
-            </Form.Item>
+          <Divider />
+          <Title level={4}>📝 Text & Background Colors</Title>
+          <Text type="secondary" style={{ display: 'block', marginBottom: '16px' }}>
+            Colors for text and background elements
+          </Text>
+          <Row gutter={[24, 16]}>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Text Primary" 
+                name="text_primary"
+                description="Main text color"
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Text Secondary" 
+                name="text_secondary"
+                description="Secondary text color"
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Background Color" 
+                name="background_color"
+                description="Page background color"
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Surface Color" 
+                name="surface_color"
+                description="Card and surface background"
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <ColorFormItem 
+                label="Border Color" 
+                name="border_color"
+                description="Border and divider color"
+              />
+            </Col>
+          </Row>
 
-            <Title level={4} style={{ marginTop: '24px' }}>Semantic Colors</Title>
+          <Divider />
+          <Title level={4}>🔖 Favicon</Title>
+          <Form.Item
+            label="Favicon URL"
+            name="favicon_url"
+            rules={[{ required: true, message: 'Favicon URL is required' }]}
+            extra="Enter a relative path (e.g., /favicon.svg) or full URL (e.g., https://example.com/favicon.ico)"
+          >
+            <Input 
+              placeholder="/favicon.svg or https://example.com/favicon.ico" 
+              size="large"
+            />
+          </Form.Item>
 
-            <Form.Item
-              label="Promo Color"
-              name="promo_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#ff4757" />
-            </Form.Item>
-
-            <Form.Item
-              label="Success Color"
-              name="success_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#52c41a" />
-            </Form.Item>
-
-            <Form.Item
-              label="Warning Color"
-              name="warning_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#faad14" />
-            </Form.Item>
-
-            <Form.Item
-              label="Error Color"
-              name="error_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#ff4d4f" />
-            </Form.Item>
-
-            <Title level={4} style={{ marginTop: '24px' }}>Text & Background Colors</Title>
-
-            <Form.Item
-              label="Text Primary"
-              name="text_primary"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#1a1a1a" />
-            </Form.Item>
-
-            <Form.Item
-              label="Text Secondary"
-              name="text_secondary"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#64748b" />
-            </Form.Item>
-
-            <Form.Item
-              label="Background Color"
-              name="background_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#fafbfc" />
-            </Form.Item>
-
-            <Form.Item
-              label="Surface Color"
-              name="surface_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#ffffff" />
-            </Form.Item>
-
-            <Form.Item
-              label="Border Color"
-              name="border_color"
-              rules={[{ pattern: /^#[0-9A-Fa-f]{6}$/, message: 'Must be a valid hex color' }]}
-            >
-              <Input placeholder="#e1e8ed" />
-            </Form.Item>
-
-            <Title level={4} style={{ marginTop: '24px' }}>Favicon</Title>
-
-            <Form.Item
-              label="Favicon URL"
-              name="favicon_url"
-              rules={[{ required: true, message: 'Favicon URL is required' }]}
-            >
-              <Input placeholder="/favicon.svg or https://example.com/favicon.ico" />
-            </Form.Item>
-
-            <Form.Item>
+          <Form.Item style={{ marginTop: '32px' }}>
+            <Space size="large">
               <Button type="primary" htmlType="submit" loading={loading} size="large">
-                Save Configuration
+                💾 Save Configuration
               </Button>
-            </Form.Item>
-          </Space>
+              <Button onClick={loadConfig} size="large">
+                🔄 Reset to Current
+              </Button>
+            </Space>
+          </Form.Item>
         </Form>
       </Card>
     </div>
