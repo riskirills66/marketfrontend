@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { Item, PurchaseRequest, PurchaseResponse, PurchaseDetails, Tag, ApiResponse, PurchaseSummary, PaginatedResponse, Admin, DestinationItem, ShippingOption, Category } from './types';
 
-const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:8080';
+// Use relative URLs so it works with any domain
+const API_BASE_URL = '';
 
 const api = axios.create({
   baseURL: `${API_BASE_URL}/api`,
