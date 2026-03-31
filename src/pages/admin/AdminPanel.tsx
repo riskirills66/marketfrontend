@@ -8,6 +8,7 @@ import EditItemModal from "./modals/EditItemModal.tsx";
 import PurchaseTable from "./purchases/PurchaseTable.tsx";
 import PurchaseDetailsModal from "./purchases/PurchaseDetailsModal.tsx";
 import CategoryManagement from "./categories/CategoryManagement.tsx";
+import SiteConfigPage from "./SiteConfigPage.tsx";
 
 const { Title, Text } = Typography;
 
@@ -441,6 +442,13 @@ const AdminPanel: React.FC<{
                 admin={admin}
                 onViewDetails={handleViewPurchaseDetails}
               />
+            ),
+          },
+          {
+            key: "config",
+            label: "Site Configuration",
+            children: (
+              <SiteConfigPage />
             ),
           },
         ]}

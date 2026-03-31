@@ -1,27 +1,73 @@
 /// <reference types="vite/client" />
 
-// Theme configuration based on environment variables
-// All VITE_ prefixed env vars are exposed to client-side code by Vite
+import { apiClient } from './api';
+import type { SiteConfig } from './types';
 
-export const theme = {
-  // Primary brand colors
-  primary: import.meta.env.VITE_PRIMARY_COLOR || '#0ea5e9',
-  secondary: import.meta.env.VITE_SECONDARY_COLOR || '#06b6d4',
-  accent: import.meta.env.VITE_ACCENT_COLOR || '#8b5cf6',
-  
-  // Semantic colors
-  promo: import.meta.env.VITE_PROMO_COLOR || '#ff4757',
-  success: import.meta.env.VITE_SUCCESS_COLOR || '#52c41a',
-  warning: import.meta.env.VITE_WARNING_COLOR || '#faad14',
-  error: import.meta.env.VITE_ERROR_COLOR || '#ff4d4f',
-  
-  // Neutral colors
-  textPrimary: import.meta.env.VITE_TEXT_PRIMARY || '#1a1a1a',
-  textSecondary: import.meta.env.VITE_TEXT_SECONDARY || '#64748b',
-  background: import.meta.env.VITE_BACKGROUND_COLOR || '#fafbfc',
-  surface: import.meta.env.VITE_SURFACE_COLOR || '#ffffff',
-  border: import.meta.env.VITE_BORDER_COLOR || '#e1e8ed',
+// Default theme configuration (fallback)
+const defaultTheme = {
+  primary: '#0ea5e9',
+  secondary: '#06b6d4',
+  accent: '#8b5cf6',
+  promo: '#ff4757',
+  success: '#52c41a',
+  warning: '#faad14',
+  error: '#ff4d4f',
+  textPrimary: '#1a1a1a',
+  textSecondary: '#64748b',
+  background: '#fafbfc',
+  surface: '#ffffff',
+  border: '#e1e8ed',
+  faviconUrl: '/favicon.svg',
 };
+
+// Current theme (will be loaded from API)
+export let theme = { ...defaultTheme };
+
+// Load theme from API
+export async function loadThemeFromAPI(): Promise<void> {
+  try {
+    const config = await apiClient.getSiteConfig();
+    theme = {
+      primary: config.primary_color,
+      secondary: config.secondary_color,
+      accent: config.accent_color,
+      promo: config.promo_color,
+      success: config.success_color,
+      warning: config.warning_color,
+      error: config.error_color,
+      textPrimary: config.text_primary,
+      textSecondary: config.text_secondary,
+      background: config.background_color,
+      surface: config.surface_color,
+      border: config.border_color,
+      faviconUrl: config.favicon_url,
+    };
+    
+    // Update favicon
+    updateFavicon(config.favicon_url);
+    
+    // Inject CSS variables
+    injectThemeCSS();
+  } catch (error) {
+    console.error('Failed to load theme from API, using defaults:', error);
+    // Use default theme if API fails
+    theme = { ...defaultTheme };
+    injectThemeCSS();
+  }
+}
+
+// Update favicon dynamically
+function updateFavicon(url: string) {
+  // Remove existing favicon links
+  const existingLinks = document.querySelectorAll('link[rel*="icon"]');
+  existingLinks.forEach(link => link.remove());
+  
+  // Add new favicon
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.href = url;
+  document.head.appendChild(link);
+}
 
 // Helper function to convert hex to RGB
 function hexToRgb(hex: string): string {

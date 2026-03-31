@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Item, PurchaseRequest, PurchaseResponse, PurchaseDetails, Tag, ApiResponse, PurchaseSummary, PaginatedResponse, Admin, DestinationItem, ShippingOption, Category } from './types';
+import { Item, PurchaseRequest, PurchaseResponse, PurchaseDetails, Tag, ApiResponse, PurchaseSummary, PaginatedResponse, Admin, DestinationItem, ShippingOption, Category, SiteConfig, UpdateSiteConfigRequest } from './types';
 
 // Use relative URLs so it works with any domain
 const API_BASE_URL = '';
@@ -87,6 +87,12 @@ export const apiClient = {
     return response.data;
   },
 
+  // Get site configuration
+  async getSiteConfig(): Promise<SiteConfig> {
+    const response = await api.get<SiteConfig>('/config');
+    return response.data;
+  },
+
   // Admin category management functions
   async createAdminCategory(category: { name: string; pict?: string }): Promise<Category> {
     const response = await adminApi.post<Category>('/categories', category);
@@ -105,6 +111,12 @@ export const apiClient = {
 
   async updateCategoriesSortOrder(categories: { id: number; sort_order: number }[]): Promise<{ message: string }> {
     const response = await adminApi.put<{ message: string }>('/categories/sort-order', { categories });
+    return response.data;
+  },
+
+  // Admin site config management
+  async updateSiteConfig(config: UpdateSiteConfigRequest): Promise<SiteConfig> {
+    const response = await adminApi.put<SiteConfig>('/config', config);
     return response.data;
   },
 
@@ -232,6 +244,12 @@ export const apiClient = {
             params.append('end_date', endDate);
         }
         const response = await adminApi.get<PaginatedResponse<PurchaseSummary>>(`/purchases?${params.toString()}`);
+        return response.data;
+    },
+
+    // Admin site config management
+    async updateAdminSiteConfig(config: UpdateSiteConfigRequest): Promise<SiteConfig> {
+        const response = await adminApi.put<SiteConfig>('/config', config);
         return response.data;
     },
 };

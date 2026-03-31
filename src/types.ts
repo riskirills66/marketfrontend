@@ -129,3 +129,37 @@ export interface Admin {
   username: string;
   created_at: string;
 }
+
+export interface SiteConfig {
+  id: number;
+  primary_color: string;
+  secondary_color: string;
+  accent_color: string;
+  promo_color: string;
+  success_color: string;
+  warning_color: string;
+  error_color: string;
+  text_primary: string;
+  text_secondary: string;
+  background_color: string;
+  surface_color: string;
+  border_color: string;
+  favicon_url: string;
+  updated_at: string;
+}
+
+export interface UpdateSiteConfigRequest {
+  primary_color?: string;
+  secondary_color?: string;
+  accent_color?: string;
+  promo_color?: string;
+  success_color?: string;
+  warning_color?: string;
+  error_color?: string;
+  text_primary?: string;
+  text_secondary?: string;
+  background_color?: string;
+  surface_color?: string;
+  border_color?: string;
+  favicon_url?: string;
+}

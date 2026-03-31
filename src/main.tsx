@@ -1,14 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import { injectThemeCSS } from './theme.ts'
+import { loadThemeFromAPI } from './theme.ts'
 import './glassmorphism.css'
 
-// Inject theme colors from environment variables
-injectThemeCSS()
-
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+// Load theme from API and render app
+loadThemeFromAPI().then(() => {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+})
