@@ -18,6 +18,7 @@ export interface Category {
   id: number;
   name: string;
   pict?: string;
+  sort_order: number;
 }
 
 export interface Tag {

@@ -1,10 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Form, Input, Modal, Space, Spin, Table, Typography, message, Image } from "antd";
-import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, PlusOutlined, MenuOutlined } from "@ant-design/icons";
 import { Category } from "../../../types";
 import { apiClient } from "../../../api";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const { Title } = Typography;
+
+const DragHandle = ({ id }: { id: number }) => {
+  const { attributes, listeners } = useSortable({ id });
+  return (
+    <MenuOutlined
+      style={{ cursor: 'grab', color: '#999' }}
+      {...attributes}
+      {...listeners}
+    />
+  );
+};
+
+const SortableRow = ({ children, ...props }: any) => {
+  const {
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: props['data-row-key'] });
+
+  const style = {
+    ...props.style,
+    transform: CSS.Transform.toString(transform),
+    transition,
+    ...(isDragging ? { position: 'relative', zIndex: 9999 } : {}),
+  };
+
+  return (
+    <tr {...props} ref={setNodeRef} style={style}>
+      {children}
+    </tr>
+  );
+};
 
 const CategoryManagement: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -12,6 +48,13 @@ const CategoryManagement: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [form] = Form.useForm();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -22,6 +65,31 @@ const CategoryManagement: React.FC = () => {
       message.error("Failed to fetch categories");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDragEnd = async (event: any) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      const oldIndex = categories.findIndex((cat) => cat.id === active.id);
+      const newIndex = categories.findIndex((cat) => cat.id === over.id);
+
+      const newCategories = arrayMove(categories, oldIndex, newIndex);
+      setCategories(newCategories);
+
+      // Update sort_order on backend
+      try {
+        const updatedOrders = newCategories.map((cat, index) => ({
+          id: cat.id,
+          sort_order: index,
+        }));
+        await apiClient.updateCategoriesSortOrder(updatedOrders);
+        message.success("Category order updated");
+      } catch (error) {
+        message.error("Failed to update category order");
+        fetchCategories(); // Revert on error
+      }
     }
   };
 
@@ -92,6 +160,12 @@ const CategoryManagement: React.FC = () => {
   };
 
   const columns = [
+    {
+      title: "",
+      key: "drag",
+      width: 40,
+      render: (_: any, record: Category) => <DragHandle id={record.id} />,
+    },
     {
       title: "ID",
       dataIndex: "id",
@@ -172,12 +246,28 @@ const CategoryManagement: React.FC = () => {
 
       <Card>
         <Spin spinning={loading}>
-          <Table
-            dataSource={categories}
-            columns={columns}
-            rowKey="id"
-            pagination={{ pageSize: 10 }}
-          />
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={categories.map((cat) => cat.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <Table
+                dataSource={categories}
+                columns={columns}
+                rowKey="id"
+                pagination={false}
+                components={{
+                  body: {
+                    row: SortableRow,
+                  },
+                }}
+              />
+            </SortableContext>
+          </DndContext>
         </Spin>
       </Card>
 

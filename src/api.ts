@@ -102,6 +102,11 @@ export const apiClient = {
     return response.data;
   },
 
+  async updateCategoriesSortOrder(categories: { id: number; sort_order: number }[]): Promise<{ message: string }> {
+    const response = await adminApi.put<{ message: string }>('/categories/sort-order', { categories });
+    return response.data;
+  },
+
   // Get items by tags
   async getItemsByTags(tags: string[], page: number = 1, limit: number = 12, search?: string, categoryId?: number | null): Promise<{ items: Item[]; total: number; hasMore: boolean }> {
     const params = new URLSearchParams();
