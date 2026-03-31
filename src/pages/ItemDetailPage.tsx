@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Empty, InputNumber, Spin, Typography, message } from "antd";
-import { MinusOutlined, PlusOutlined, ShoppingCartOutlined, ShopOutlined } from "@ant-design/icons";
+import { MinusOutlined, PlusOutlined, ShoppingCartOutlined, ShopOutlined, DownOutlined } from "@ant-design/icons";
 import { apiClient } from "../api";
 import { Item } from "../types";
 import CartContext from "../contexts/AppCartContext";
@@ -16,6 +16,7 @@ const ItemDetailPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const { addToCart } = React.useContext(CartContext);
 
   useEffect(() => {
@@ -39,6 +40,29 @@ const ItemDetailPage: React.FC = () => {
 
     fetchItem();
   }, [id]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const descriptionSection = document.querySelector('.item-description-section');
+      if (descriptionSection) {
+        const rect = descriptionSection.getBoundingClientRect();
+        // Hide indicator when description section is visible
+        if (rect.top < window.innerHeight) {
+          setShowScrollIndicator(false);
+        } else {
+          setShowScrollIndicator(true);
+        }
+      }
+    };
+
+    // Only add scroll listener on mobile
+    if (window.innerWidth <= 768) {
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      setShowScrollIndicator(false);
+    }
+  }, [item]);
 
   const handleAddToCart = () => {
     if (item) {
@@ -95,6 +119,12 @@ const ItemDetailPage: React.FC = () => {
   return (
     <div className="item-detail-page">
       <BackButton onBackClick={() => navigate("/")} title="Detail Produk" />
+      {showScrollIndicator && (
+        <div className="scroll-indicator">
+          <DownOutlined />
+          <span>Scroll untuk info lengkap</span>
+        </div>
+      )}
       <div className="item-detail-container">
         <div className="item-image-section">
           <img
@@ -114,9 +144,6 @@ const ItemDetailPage: React.FC = () => {
             <Title level={2} className="item-detail-title">
               {item.name}
             </Title>
-            <div className="item-code-badge">
-              <span className="item-code">#{item.code}</span>
-            </div>
           </div>
 
           <div className="item-price-section">

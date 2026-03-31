@@ -1,0 +1,744 @@
+/* Glassmorphism Overrides for App.css Components */
+
+/* Modern Header with Glass Effect */
+.modern-header {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Bottom Footer with Glass Effect */
+.bottom-footer,
+.purchase-footer {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-top: 1px solid var(--glass-border);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Search Filter Section with Glass */
+.search-filter-section {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+}
+
+/* Categories Menu with Glass */
+.categories-menu-container {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Popular Tags with Glass */
+.popular-tags-container {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Product Grid Items with Glass */
+.product-grid-item {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+.product-grid-item:hover {
+  background: var(--glass-bg) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Cart Items Card with Glass */
+.cart-items-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+/* Promo Carousel with Glass - Transparent Container */
+.carousel-wrapper {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.promo-carousel-container {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  overflow: hidden !important;
+  padding: 20px 0;
+}
+
+.carousel-content {
+  overflow: visible !important;
+}
+
+.carousel-slide {
+  padding: 20px !important;
+}
+
+.promo-item-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Carousel Navigation Buttons with Glass */
+.carousel-nav-btn {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.carousel-nav-btn:hover {
+  background: var(--glass-bg) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Purchase Page Cards with Glass */
+.shipping-card,
+.order-summary-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+.shipping-card .ant-card-body,
+.order-summary-card .ant-card-body {
+  background: transparent !important;
+}
+
+/* Page Header with Glass */
+.page-header {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Hero Section with Glass */
+.hero-section {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Profile Card with Glass */
+.profile-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+/* Floating Cart Button with Glass */
+.floating-cart-button {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+/* Input Fields with Glass */
+.modern-search .ant-input,
+.shipping-card .ant-input,
+.shipping-card .ant-input-affix-wrapper {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border) !important;
+}
+
+.modern-search .ant-input:focus,
+.shipping-card .ant-input:focus,
+.shipping-card .ant-input-affix-wrapper:focus {
+  background: var(--glass-bg) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1) !important;
+}
+
+/* Buttons with Glass Effect */
+.ant-btn-default {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border) !important;
+}
+
+.ant-btn-default:hover {
+  background: var(--glass-bg) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* Tags with Glass */
+.popular-tag,
+.item-tag {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border) !important;
+}
+
+.popular-tag:hover {
+  background: var(--glass-bg) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.popular-tag.active {
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* More Tags Modal Items with Glass */
+.more-tag-item {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border) !important;
+}
+
+.more-tag-item:hover {
+  background: var(--glass-bg) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.more-tag-item.active {
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* Selected Tags Preview with Glass */
+.selected-tags-preview {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border) !important;
+}
+
+/* Category Items with Glass */
+.category-item {
+  background: transparent !important;
+}
+
+.category-item:hover {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.category-item.active {
+  background: transparent !important;
+}
+
+/* Menu Items with Glass */
+.menu-item:hover {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Quantity Controls with Glass */
+.quantity-btn {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--glass-border) !important;
+}
+
+.quantity-btn:hover {
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.quantity-input {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--glass-border) !important;
+}
+
+.quantity-input:focus {
+  background: var(--glass-bg) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* Remove Item Button with Glass */
+.remove-item-btn {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.remove-item-btn:hover {
+  background: var(--color-error) !important;
+}
+
+/* Overlay Actions with Glass */
+.overlay-btn {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border) !important;
+}
+
+.overlay-btn:hover {
+  background: var(--glass-bg) !important;
+}
+
+/* Order Summary Card Header with Glass */
+.order-summary-card .ant-card-head {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--glass-border) !important;
+}
+
+/* Cart Content with Glass */
+.cart-content {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+/* Modern App Layout with Glass Background */
+.modern-app-layout {
+  background: linear-gradient(135deg, var(--bg-gradient-light) 0%, var(--bg-gradient-medium) 50%, var(--bg-gradient-light) 100%) !important;
+}
+
+.modern-content {
+  background: transparent !important;
+}
+
+/* Item Detail Page with Glass */
+.item-detail-page {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: calc(100vh - 64px);
+}
+
+/* Item Detail Page with Glass */
+.item-detail-page {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: calc(100vh - 64px);
+}
+
+/* Back Button in Item Detail - Glass Style */
+.item-detail-page .back-button-container {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border) !important;
+  margin-bottom: 0 !important;
+  padding: 16px 20px !important;
+}
+
+/* Item Detail Container - Clean Minimalist Layout */
+.item-detail-page .item-detail-container {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: 1200px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  overflow: visible;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+}
+
+/* Item Image Section - Clean, Full Width */
+.item-detail-page .item-image-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 60px 40px !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px;
+  position: relative !important;
+  top: 0 !important;
+}
+
+.item-detail-image {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  max-height: 500px;
+  object-fit: contain;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.placeholder-image-large {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Item Info Section - Clean Right Panel */
+.item-info-section {
+  background: transparent !important;
+  padding: 40px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 20px !important;
+}
+
+/* Item Header - Clean Title */
+.item-header {
+  display: flex;
+  flex-direction: column !important;
+  gap: 0 !important;
+  padding-bottom: 0 !important;
+  border-bottom: none !important;
+  margin-bottom: 0 !important;
+}
+
+.item-detail-title {
+  font-size: 24px !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  font-weight: 700 !important;
+}
+
+/* Item Price Section - Clean, Compact */
+.item-price-section {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none !important;
+  border-radius: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-detail-price {
+  font-size: 28px !important;
+  margin: 0 !important;
+  font-weight: 800 !important;
+}
+
+.item-detail-price.original {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+}
+
+.item-detail-price.discounted {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  margin: 0 !important;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.item-price-with-discount {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Item Tags Section - Compact */
+.item-tags-section {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.item-tag {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border) !important;
+  padding: 4px 10px !important;
+  font-size: 12px !important;
+  border-radius: 6px !important;
+}
+
+/* Item Description Section - Clean */
+.item-description-section {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none !important;
+  border-radius: 0;
+  padding: 0 !important;
+  padding-top: 16px !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  border-top: 1px solid var(--glass-border) !important;
+}
+
+.description-title {
+  font-size: 16px !important;
+  margin-bottom: 8px !important;
+  font-weight: 700 !important;
+}
+
+.item-description {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: var(--color-text-secondary) !important;
+  margin: 0 !important;
+}
+
+/* Item Actions Section - Clean */
+.item-actions-section {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none !important;
+  border-radius: 0;
+  padding: 0 !important;
+  padding-top: 16px !important;
+  margin: 0 !important;
+  margin-top: auto !important;
+  box-shadow: none !important;
+  border-top: 1px solid var(--glass-border) !important;
+}
+
+/* Quantity Selector - Compact */
+.quantity-selector {
+  background: transparent !important;
+  padding: 0 !important;
+  margin-bottom: 12px !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quantity-label {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+}
+
+/* Action Buttons - Clean */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 0;
+}
+
+/* Discount Badge - Compact */
+.discount-percentage {
+  background: var(--color-promo) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+}
+
+/* Savings Text - Compact */
+.savings-text {
+  background: #f6ffed !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid #b7eb8f !important;
+  padding: 4px 10px !important;
+  font-size: 12px !important;
+  border-radius: 6px !important;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .item-detail-page .item-detail-container {
+    grid-template-columns: 1fr !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  
+  .item-detail-page .item-image-section {
+    border-radius: 0 !important;
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+  
+  .item-detail-image {
+    max-height: none !important;
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+  }
+  
+  .item-info-section {
+    padding: 20px !important;
+    gap: 16px !important;
+  }
+  
+  .item-detail-title {
+    font-size: 20px !important;
+  }
+  
+  .item-detail-price {
+    font-size: 24px !important;
+  }
+  
+  .item-detail-price.discounted {
+    font-size: 24px !important;
+  }
+  
+  .description-title {
+    font-size: 15px !important;
+  }
+  
+  .item-description {
+    font-size: 13px !important;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .item-actions-section {
+    padding-top: 12px !important;
+  }
+  
+  .item-description-section {
+    padding-top: 12px !important;
+  }
+  
+  /* Scroll Indicator - Mobile Only */
+  .scroll-indicator {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 24px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-primary);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    animation: bounce 2s infinite;
+  }
+  
+  .scroll-indicator .anticon {
+    font-size: 14px;
+    animation: bounceArrow 2s infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    40% {
+      transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+      transform: translateX(-50%) translateY(-5px);
+    }
+  }
+  
+  @keyframes bounceArrow {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(4px);
+    }
+    60% {
+      transform: translateY(2px);
+    }
+  }
+}
+
+/* Hide scroll indicator on desktop */
+@media (min-width: 769px) {
+  .scroll-indicator {
+    display: none !important;
+  }
+}
+
+/* Purchase Page with Glass */
+.purchase-page {
+  background: transparent !important;
+}
+
+/* Modern Cart Page with Glass */
+.modern-cart-page {
+  background: transparent !important;
+}
+
+/* Modern Home Page with Glass */
+.modern-home-page {
+  background: transparent !important;
+}
+
+/* Add subtle gradient background to body */
+body {
+  background: linear-gradient(135deg, var(--bg-gradient-light) 0%, var(--bg-gradient-medium) 50%, var(--bg-gradient-light) 100%) !important;
+}

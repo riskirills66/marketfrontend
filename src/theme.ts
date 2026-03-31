@@ -51,6 +51,59 @@ export function injectThemeCSS() {
   // Also inject RGB versions for rgba() usage
   root.style.setProperty('--color-primary-rgb', hexToRgb(theme.primary));
   root.style.setProperty('--color-promo-rgb', hexToRgb(theme.promo));
+  
+  // Glassmorphism variables
+  root.style.setProperty('--glass-bg', 'rgba(255, 255, 255, 0.7)');
+  root.style.setProperty('--glass-bg-dark', 'rgba(255, 255, 255, 0.5)');
+  root.style.setProperty('--glass-border', 'rgba(255, 255, 255, 0.3)');
+  root.style.setProperty('--glass-shadow', '0 8px 32px rgba(0, 0, 0, 0.1)');
+  root.style.setProperty('--glass-blur', '20px');
+  
+  // Subtle background gradient based on primary color (very subtle)
+  const primaryRgb = hexToRgb(theme.primary);
+  root.style.setProperty('--bg-gradient-light', `rgba(${primaryRgb}, 0.02)`);
+  root.style.setProperty('--bg-gradient-medium', `rgba(${primaryRgb}, 0.05)`);
 }
+
+// Ant Design theme configuration for glassmorphism
+export const antdTheme = {
+  token: {
+    colorPrimary: theme.primary,
+    colorSuccess: theme.success,
+    colorWarning: theme.warning,
+    colorError: theme.error,
+    colorInfo: theme.secondary,
+    borderRadius: 12,
+    fontSize: 14,
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  },
+  components: {
+    Modal: {
+      contentBg: 'rgba(255, 255, 255, 0.85)',
+      headerBg: 'rgba(255, 255, 255, 0.85)',
+    },
+    Card: {
+      colorBgContainer: 'rgba(255, 255, 255, 0.7)',
+    },
+    Drawer: {
+      colorBgElevated: 'rgba(255, 255, 255, 0.85)',
+    },
+    Dropdown: {
+      colorBgElevated: 'rgba(255, 255, 255, 0.85)',
+    },
+    Menu: {
+      colorBgContainer: 'transparent',
+    },
+    Input: {
+      colorBgContainer: 'rgba(255, 255, 255, 0.6)',
+    },
+    Select: {
+      colorBgContainer: 'rgba(255, 255, 255, 0.6)',
+    },
+    Button: {
+      colorBgContainer: 'rgba(255, 255, 255, 0.6)',
+    },
+  },
+};
 
 export default theme;

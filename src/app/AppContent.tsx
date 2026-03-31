@@ -154,6 +154,13 @@ const AppContent: React.FC = () => {
             />
           )}
           
+          {location.pathname.startsWith("/item/") && (
+            <FloatingCartButton 
+              cartItemCount={cartItemCount} 
+              onCartClick={() => navigate("/cart")} 
+            />
+          )}
+          
           <MoreTagsModal
             visible={moreTagsModalVisible}
             onClose={handleCloseMoreTags}
