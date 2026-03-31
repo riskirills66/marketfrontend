@@ -1,14 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Form, Input, Button, Card, message, Space, Typography, ColorPicker, Row, Col, Divider } from 'antd';
+import { Form, Input, Button, Card, message, Space, Typography, ColorPicker, Table, Divider } from 'antd';
 import type { Color } from 'antd/es/color-picker';
 import { apiClient } from '../../api';
 import type { SiteConfig, UpdateSiteConfigRequest } from '../../types';
 
 const { Title, Text } = Typography;
 
+interface ColorConfig {
+  key: string;
+  label: string;
+  name: string;
+  description: string;
+  value: string;
+}
+
 export default function SiteConfigPage() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [config, setConfig] = useState<SiteConfig | null>(null);
 
   useEffect(() => {
     loadConfig();
@@ -17,6 +26,7 @@ export default function SiteConfigPage() {
   const loadConfig = async () => {
     try {
       const data = await apiClient.getSiteConfig();
+      setConfig(data);
       form.setFieldsValue({
         primary_color: data.primary_color,
         secondary_color: data.secondary_color,
@@ -33,7 +43,7 @@ export default function SiteConfigPage() {
         favicon_url: data.favicon_url,
       });
     } catch (error) {
-      message.error('Failed to load configuration');
+      message.error('Gagal memuat konfigurasi');
       console.error(error);
     }
   };
@@ -41,17 +51,15 @@ export default function SiteConfigPage() {
   const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
-      // Check if admin is logged in
       const sessionToken = localStorage.getItem('admin_session_token');
       if (!sessionToken) {
-        message.error('You must be logged in as admin to update configuration');
+        message.error('Anda harus login sebagai admin untuk memperbarui konfigurasi');
         setLoading(false);
         return;
       }
 
       const updateData: UpdateSiteConfigRequest = {};
       
-      // Convert Color objects to hex strings
       Object.keys(values).forEach(key => {
         const value = values[key];
         if (value && typeof value === 'object' && 'toHexString' in value) {
@@ -62,13 +70,13 @@ export default function SiteConfigPage() {
       });
 
       await apiClient.updateAdminSiteConfig(updateData);
-      message.success('Configuration updated! Refresh the page to see changes.');
+      message.success('Konfigurasi berhasil diperbarui! Refresh halaman untuk melihat perubahan.');
       loadConfig();
     } catch (error: any) {
       if (error?.response?.status === 401) {
-        message.error('Session expired. Please login again.');
+        message.error('Sesi berakhir. Silakan login kembali.');
       } else {
-        message.error('Failed to update configuration');
+        message.error('Gagal memperbarui konfigurasi');
       }
       console.error(error);
     } finally {
@@ -76,38 +84,80 @@ export default function SiteConfigPage() {
     }
   };
 
-  const ColorFormItem = ({ label, name, description }: { label: string; name: string; description?: string }) => (
-    <Form.Item
-      label={label}
-      name={name}
-      extra={description}
-      getValueFromEvent={(color: Color) => color?.toHexString()}
-      getValueProps={(value) => ({ value })}
-    >
-      <ColorPicker
-        showText
-        format="hex"
-        size="large"
-        presets={[
-          {
-            label: 'Recommended',
-            colors: [
-              '#0ea5e9', '#06b6d4', '#8b5cf6', '#f59e0b',
-              '#10b981', '#ef4444', '#f97316', '#84cc16',
-              '#ec4899', '#6366f1', '#14b8a6', '#f43f5e',
-              '#1a1a1a', '#64748b', '#fafbfc', '#ffffff',
-            ],
-          },
-        ]}
-      />
-    </Form.Item>
-  );
+  const brandColors: ColorConfig[] = [
+    { key: '1', label: 'Warna Primer', name: 'primary_color', description: 'Warna brand utama untuk tombol dan highlight', value: form.getFieldValue('primary_color') || '#0ea5e9' },
+    { key: '2', label: 'Warna Sekunder', name: 'secondary_color', description: 'Warna brand pendukung', value: form.getFieldValue('secondary_color') || '#06b6d4' },
+    { key: '3', label: 'Warna Aksen', name: 'accent_color', description: 'Warna aksen untuk elemen khusus', value: form.getFieldValue('accent_color') || '#8b5cf6' },
+  ];
+
+  const semanticColors: ColorConfig[] = [
+    { key: '4', label: 'Warna Promo', name: 'promo_color', description: 'Digunakan untuk badge promosi dan penawaran', value: form.getFieldValue('promo_color') || '#ff4757' },
+    { key: '5', label: 'Warna Sukses', name: 'success_color', description: 'Menunjukkan aksi yang berhasil', value: form.getFieldValue('success_color') || '#52c41a' },
+    { key: '6', label: 'Warna Peringatan', name: 'warning_color', description: 'Menunjukkan peringatan atau hati-hati', value: form.getFieldValue('warning_color') || '#faad14' },
+    { key: '7', label: 'Warna Error', name: 'error_color', description: 'Menunjukkan error atau masalah', value: form.getFieldValue('error_color') || '#ff4d4f' },
+  ];
+
+  const textBackgroundColors: ColorConfig[] = [
+    { key: '8', label: 'Teks Primer', name: 'text_primary', description: 'Warna teks utama', value: form.getFieldValue('text_primary') || '#1a1a1a' },
+    { key: '9', label: 'Teks Sekunder', name: 'text_secondary', description: 'Warna teks sekunder', value: form.getFieldValue('text_secondary') || '#64748b' },
+    { key: '10', label: 'Warna Background', name: 'background_color', description: 'Warna background halaman', value: form.getFieldValue('background_color') || '#fafbfc' },
+    { key: '11', label: 'Warna Surface', name: 'surface_color', description: 'Background card dan surface', value: form.getFieldValue('surface_color') || '#ffffff' },
+    { key: '12', label: 'Warna Border', name: 'border_color', description: 'Warna border dan divider', value: form.getFieldValue('border_color') || '#e1e8ed' },
+  ];
+
+  const columns = [
+    {
+      title: 'Nama',
+      dataIndex: 'label',
+      key: 'label',
+      width: '20%',
+      render: (text: string) => <Text strong>{text}</Text>,
+    },
+    {
+      title: 'Deskripsi',
+      dataIndex: 'description',
+      key: 'description',
+      width: '40%',
+      render: (text: string) => <Text type="secondary">{text}</Text>,
+    },
+    {
+      title: 'Warna',
+      dataIndex: 'name',
+      key: 'color',
+      width: '40%',
+      render: (_: any, record: ColorConfig) => (
+        <Form.Item
+          name={record.name}
+          style={{ marginBottom: 0 }}
+          getValueFromEvent={(color: Color) => color?.toHexString()}
+          getValueProps={(value) => ({ value })}
+        >
+          <ColorPicker
+            showText
+            format="hex"
+            size="large"
+            presets={[
+              {
+                label: 'Rekomendasi',
+                colors: [
+                  '#0ea5e9', '#06b6d4', '#8b5cf6', '#f59e0b',
+                  '#10b981', '#ef4444', '#f97316', '#84cc16',
+                  '#ec4899', '#6366f1', '#14b8a6', '#f43f5e',
+                  '#1a1a1a', '#64748b', '#fafbfc', '#ffffff',
+                ],
+              },
+            ]}
+          />
+        </Form.Item>
+      ),
+    },
+  ];
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <Title level={2}>🎨 Site Configuration</Title>
+    <div style={{ padding: '24px', maxWidth: '1400px', margin: '0 auto' }}>
+      <Title level={2}>🎨 Konfigurasi Halaman</Title>
       <Text type="secondary">
-        Customize your site's theme colors and favicon. Changes take effect after refreshing the page.
+        Sesuaikan warna tema dan favicon halaman Anda. Perubahan akan diterapkan setelah refresh halaman.
       </Text>
 
       <Card style={{ marginTop: '24px' }}>
@@ -116,123 +166,55 @@ export default function SiteConfigPage() {
           layout="vertical"
           onFinish={handleSubmit}
         >
-          <Title level={4}>🎯 Brand Colors</Title>
+          <Title level={4}>🎯 Warna Brand</Title>
           <Text type="secondary" style={{ display: 'block', marginBottom: '16px' }}>
-            Main colors that define your brand identity
+            Warna utama yang mendefinisikan identitas brand Anda
           </Text>
-          <Row gutter={[24, 16]}>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Primary Color" 
-                name="primary_color"
-                description="Main brand color used for buttons and highlights"
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Secondary Color" 
-                name="secondary_color"
-                description="Supporting brand color"
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Accent Color" 
-                name="accent_color"
-                description="Accent color for special elements"
-              />
-            </Col>
-          </Row>
+          <Table
+            columns={columns}
+            dataSource={brandColors}
+            pagination={false}
+            size="small"
+            bordered
+            style={{ marginBottom: '32px' }}
+          />
 
-          <Divider />
-          <Title level={4}>✨ Semantic Colors</Title>
+          <Title level={4}>✨ Warna Semantik</Title>
           <Text type="secondary" style={{ display: 'block', marginBottom: '16px' }}>
-            Colors that convey meaning and status
+            Warna yang menyampaikan makna dan status
           </Text>
-          <Row gutter={[24, 16]}>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Promo Color" 
-                name="promo_color"
-                description="Used for promotional badges and offers"
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Success Color" 
-                name="success_color"
-                description="Indicates successful actions"
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Warning Color" 
-                name="warning_color"
-                description="Indicates warnings or caution"
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Error Color" 
-                name="error_color"
-                description="Indicates errors or problems"
-              />
-            </Col>
-          </Row>
+          <Table
+            columns={columns}
+            dataSource={semanticColors}
+            pagination={false}
+            size="small"
+            bordered
+            style={{ marginBottom: '32px' }}
+          />
 
-          <Divider />
-          <Title level={4}>📝 Text & Background Colors</Title>
+          <Title level={4}>📝 Warna Teks & Background</Title>
           <Text type="secondary" style={{ display: 'block', marginBottom: '16px' }}>
-            Colors for text and background elements
+            Warna untuk elemen teks dan background
           </Text>
-          <Row gutter={[24, 16]}>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Text Primary" 
-                name="text_primary"
-                description="Main text color"
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Text Secondary" 
-                name="text_secondary"
-                description="Secondary text color"
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Background Color" 
-                name="background_color"
-                description="Page background color"
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Surface Color" 
-                name="surface_color"
-                description="Card and surface background"
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <ColorFormItem 
-                label="Border Color" 
-                name="border_color"
-                description="Border and divider color"
-              />
-            </Col>
-          </Row>
+          <Table
+            columns={columns}
+            dataSource={textBackgroundColors}
+            pagination={false}
+            size="small"
+            bordered
+            style={{ marginBottom: '32px' }}
+          />
 
           <Divider />
           <Title level={4}>🔖 Favicon</Title>
           <Form.Item
-            label="Favicon URL"
+            label="URL Favicon"
             name="favicon_url"
-            rules={[{ required: true, message: 'Favicon URL is required' }]}
-            extra="Enter a relative path (e.g., /favicon.svg) or full URL (e.g., https://example.com/favicon.ico)"
+            rules={[{ required: true, message: 'URL favicon wajib diisi' }]}
+            extra="Masukkan path relatif (contoh: /favicon.svg) atau URL lengkap (contoh: https://example.com/favicon.ico)"
           >
             <Input 
-              placeholder="/favicon.svg or https://example.com/favicon.ico" 
+              placeholder="/favicon.svg atau https://example.com/favicon.ico" 
               size="large"
             />
           </Form.Item>
@@ -240,10 +222,10 @@ export default function SiteConfigPage() {
           <Form.Item style={{ marginTop: '32px' }}>
             <Space size="large">
               <Button type="primary" htmlType="submit" loading={loading} size="large">
-                💾 Save Configuration
+                💾 Simpan Konfigurasi
               </Button>
               <Button onClick={loadConfig} size="large">
-                🔄 Reset to Current
+                🔄 Reset ke Saat Ini
               </Button>
             </Space>
           </Form.Item>

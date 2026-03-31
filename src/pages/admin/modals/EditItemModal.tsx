@@ -94,9 +94,9 @@ const EditItemModal: React.FC<{
       setTags([]);
       setTagInput("");
       onClose();
-      message.success("Item updated successfully!");
+      message.success("Item berhasil diperbarui!");
     } catch (error) {
-      message.error("Failed to update item. Please try again.");
+      message.error("Gagal memperbarui item. Silakan coba lagi.");
     } finally {
       setLoading(false);
     }
@@ -107,65 +107,65 @@ const EditItemModal: React.FC<{
       <Form form={form} layout="vertical" onFinish={handleSubmit} size="small" style={{ marginTop: '-8px' }}>
         <Row gutter={12}>
           <Col span={12}>
-            <Form.Item name="name" label="Item Name" rules={[{ required: true, message: "Please enter item name" }]}>
-              <Input placeholder="Enter item name" />
+            <Form.Item name="name" label="Nama Item" rules={[{ required: true, message: "Masukkan nama item" }]}>
+              <Input placeholder="Masukkan nama item" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="code" label="Item Code" rules={[{ required: true, message: "Please enter item code" }, { pattern: /^[A-Z0-9-]+$/, message: "Code must contain only uppercase letters, numbers, and hyphens" }]}>
-              <Input placeholder="Enter item code (e.g., ITEM-0001)" />
+            <Form.Item name="code" label="Kode Item" rules={[{ required: true, message: "Masukkan kode item" }, { pattern: /^[A-Z0-9-]+$/, message: "Kode harus huruf besar, angka, dan tanda hubung" }]}>
+              <Input placeholder="Masukkan kode item (contoh: ITEM-0001)" />
             </Form.Item>
           </Col>
         </Row>
 
-        <Form.Item name="description" label="Description" rules={[{ required: true, message: "Please enter description" }]} style={{ marginBottom: '16px' }}>
-          <Input.TextArea rows={2} placeholder="Enter item description" />
+        <Form.Item name="description" label="Deskripsi" rules={[{ required: true, message: "Masukkan deskripsi" }]} style={{ marginBottom: '16px' }}>
+          <Input.TextArea rows={2} placeholder="Masukkan deskripsi item" />
         </Form.Item>
 
         <Row gutter={12}>
           <Col span={8}>
-            <Form.Item name="price" label="Price (Rp)" rules={[{ required: true, message: "Please enter price" }, { type: "number", min: 0, message: "Price must be positive" }]}>
-              <InputNumber style={{ width: "100%" }} placeholder="Enter price" formatter={(value) => `Rp ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value!.replace(/Rp\s?|(,*)/g, "")} />
+            <Form.Item name="price" label="Harga (Rp)" rules={[{ required: true, message: "Masukkan harga" }, { type: "number", min: 0, message: "Harga harus positif" }]}>
+              <InputNumber style={{ width: "100%" }} placeholder="Masukkan harga" formatter={(value) => `Rp ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value!.replace(/Rp\s?|(,*)/g, "")} />
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="bough_price" label="Bought Price (Rp)" tooltip="Internal cost price, not shown to customers" rules={[{ type: "number", min: 0, message: "Bought price must be positive" }]}>
-              <InputNumber style={{ width: "100%" }} placeholder="Enter bought price (optional)" formatter={(value) => `Rp ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value!.replace(/Rp\s?|(,*)/g, "")} />
+            <Form.Item name="bough_price" label="Harga Beli (Rp)" tooltip="Harga modal internal, tidak ditampilkan ke pelanggan" rules={[{ type: "number", min: 0, message: "Harga beli harus positif" }]}>
+              <InputNumber style={{ width: "100%" }} placeholder="Masukkan harga beli (opsional)" formatter={(value) => `Rp ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value!.replace(/Rp\s?|(,*)/g, "")} />
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="price_cut" label="Price Cut (Rp)" rules={[{ type: "number", min: 0, message: "Price cut must be positive" }]}>
-              <InputNumber style={{ width: "100%" }} placeholder="Enter price cut amount (optional)" formatter={(value) => `Rp ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value!.replace(/Rp\s?|(,*)/g, "")} />
+            <Form.Item name="price_cut" label="Potongan Harga (Rp)" rules={[{ type: "number", min: 0, message: "Potongan harga harus positif" }]}>
+              <InputNumber style={{ width: "100%" }} placeholder="Masukkan potongan harga (opsional)" formatter={(value) => `Rp ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value!.replace(/Rp\s?|(,*)/g, "")} />
             </Form.Item>
           </Col>
         </Row>
 
         <Row gutter={12} style={{ marginBottom: '16px' }}>
           <Col span={6}>
-            <Form.Item name="rating" label="Rating (0.0 - 5.0)" rules={[{ required: true, message: "Please enter rating" }, { type: "number", min: 0, max: 5, message: "Rating must be between 0.0 and 5.0" }]}>
-              <InputNumber style={{ width: "100%" }} placeholder="Enter rating (0.0 - 5.0)" min={0} max={5} step={0.1} precision={1} />
+            <Form.Item name="rating" label="Rating (0.0 - 5.0)" rules={[{ required: true, message: "Masukkan rating" }, { type: "number", min: 0, max: 5, message: "Rating harus antara 0.0 dan 5.0" }]}>
+              <InputNumber style={{ width: "100%" }} placeholder="Masukkan rating (0.0 - 5.0)" min={0} max={5} step={0.1} precision={1} />
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item name="weight" label="Weight (grams)" rules={[{ required: true, message: "Please enter weight" }, { type: "number", min: 1, message: "Weight must be at least 1 gram" }]}>
-              <InputNumber style={{ width: "100%" }} placeholder="Enter weight in grams" min={1} step={1} />
+            <Form.Item name="weight" label="Berat (gram)" rules={[{ required: true, message: "Masukkan berat" }, { type: "number", min: 1, message: "Berat minimal 1 gram" }]}>
+              <InputNumber style={{ width: "100%" }} placeholder="Masukkan berat dalam gram" min={1} step={1} />
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item name="points" label="Points" rules={[{ type: "number", min: 0, message: "Points must be positive" }]}>
-              <InputNumber style={{ width: "100%" }} placeholder="Enter points" min={0} step={1} />
+            <Form.Item name="points" label="Poin" rules={[{ type: "number", min: 0, message: "Poin harus positif" }]}>
+              <InputNumber style={{ width: "100%" }} placeholder="Masukkan poin" min={0} step={1} />
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item name="image" label="Image URL" rules={[{ required: true, message: "Please enter image URL" }]}>
-              <Input placeholder="Enter image URL" />
+            <Form.Item name="image" label="URL Gambar" rules={[{ required: true, message: "Masukkan URL gambar" }]}>
+              <Input placeholder="Masukkan URL gambar" />
             </Form.Item>
           </Col>
         </Row>
 
-        <Form.Item name="category_id" label="Category" style={{ marginBottom: '16px' }}>
+        <Form.Item name="category_id" label="Kategori" style={{ marginBottom: '16px' }}>
           <Select
-            placeholder="Select a category (optional)"
+            placeholder="Pilih kategori (opsional)"
             allowClear
             showSearch
             filterOption={(input, option) =>
@@ -175,7 +175,7 @@ const EditItemModal: React.FC<{
           />
         </Form.Item>
 
-        <Form.Item name="tags" label="Tags" rules={[{ required: true, message: "Please enter at least one tag" }]} extra="Type a single word tag and press space to add it" style={{ marginBottom: '16px' }}>
+        <Form.Item name="tags" label="Tag" rules={[{ required: true, message: "Masukkan minimal satu tag" }]} extra="Ketik satu kata tag dan tekan spasi untuk menambahkan" style={{ marginBottom: '16px' }}>
           <div style={{ border: "1px solid #d9d9d9", borderRadius: "4px", padding: "4px 8px", minHeight: "32px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "4px", background: "#fff", cursor: "text" }}>
             {tags.map((tag, index) => (
               <AntTag key={index} closable onClose={() => removeTag(index)} style={{ background: "#f0f0f0", border: "1px solid #d9d9d9", borderRadius: "4px", padding: "2px 8px", margin: "0", fontSize: "12px" }}>
@@ -184,7 +184,7 @@ const EditItemModal: React.FC<{
             ))}
             <input
               type="text"
-              placeholder={tags.length === 0 ? "Type a single word tag and press space to add" : ""}
+              placeholder={tags.length === 0 ? "Ketik satu kata tag dan tekan spasi untuk menambahkan" : ""}
               value={tagInput}
               onChange={handleTagInputChange}
               onKeyDown={handleTagInputKeyDown}
@@ -195,9 +195,9 @@ const EditItemModal: React.FC<{
 
         <Form.Item style={{ marginBottom: 0 }}>
           <Space>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose}>Batal</Button>
             <Button type="primary" htmlType="submit" loading={loading}>
-              Update Item
+              Perbarui Item
             </Button>
           </Space>
         </Form.Item>
@@ -207,5 +207,3 @@ const EditItemModal: React.FC<{
 };
 
 export default EditItemModal;
-
-

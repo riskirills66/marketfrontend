@@ -43,7 +43,7 @@ const AdminPanel: React.FC<{
       setTotalItems(data.total);
       setHasMore(data.hasMore);
     } catch (error) {
-      message.error("Failed to fetch items");
+      message.error("Gagal memuat item");
     } finally {
       setLoading(false);
     }
@@ -87,9 +87,9 @@ const AdminPanel: React.FC<{
       await apiClient.createAdminItem(values);
       await fetchItems();
       setAddModalVisible(false);
-      message.success("Item created successfully");
+      message.success("Item berhasil dibuat");
     } catch (error) {
-      message.error("Failed to create item");
+      message.error("Gagal membuat item");
       throw error;
     }
   };
@@ -100,9 +100,9 @@ const AdminPanel: React.FC<{
       await fetchItems();
       setEditingItem(null);
       setEditModalVisible(false);
-      message.success("Item updated successfully");
+      message.success("Item berhasil diperbarui");
     } catch (error) {
-      message.error("Failed to update item");
+      message.error("Gagal memperbarui item");
       throw error;
     }
   };
@@ -110,10 +110,10 @@ const AdminPanel: React.FC<{
   const handleDeleteItem = async (id: number) => {
     try {
       await apiClient.deleteAdminItem(id);
-      message.success("Item deleted successfully");
+      message.success("Item berhasil dihapus");
       fetchItems();
     } catch (error) {
-      message.error("Failed to delete item");
+      message.error("Gagal menghapus item");
     }
   };
 
@@ -136,10 +136,10 @@ const AdminPanel: React.FC<{
     return (
       <>
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", flexDirection: "column" }}>
-          <Title level={2}>Admin Panel</Title>
-          <Text>Please login to access the admin panel</Text>
+          <Title level={2}>Panel Admin</Title>
+          <Text>Silakan login untuk mengakses panel admin</Text>
           <Button type="primary" onClick={onShowLogin} style={{ marginTop: "16px" }}>
-            Go to Admin Login
+            Ke Halaman Login Admin
           </Button>
         </div>
       </>
@@ -176,12 +176,12 @@ const AdminPanel: React.FC<{
       <div style={{ marginBottom: "24px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
           <div>
-            <Title level={2}>Product Management</Title>
-            <Text>Manage product in here</Text>
+            <Title level={2}>Manajemen Produk</Title>
+            <Text>Kelola produk di sini</Text>
           </div>
           <div>
             <Button onClick={onLogout}>
-              Logout
+              Keluar
             </Button>
           </div>
         </div>
@@ -193,12 +193,12 @@ const AdminPanel: React.FC<{
         items={[
           {
             key: "items",
-            label: "Item Management",
+            label: "Manajemen Item",
             children: (
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
                   <Input
-                    placeholder="Search items by name or tag..."
+                    placeholder="Cari item berdasarkan nama atau tag..."
                     value={searchQuery}
                     onChange={handleSearchChange}
                     onPressEnter={handleKeyPress as any}
@@ -214,7 +214,7 @@ const AdminPanel: React.FC<{
                       setAddModalVisible(true);
                     }}
                   >
-                    Add New Item
+                    Tambah Item Baru
                   </Button>
                 </div>
 
@@ -232,31 +232,31 @@ const AdminPanel: React.FC<{
                         <thead>
                           <tr style={{ backgroundColor: "#fafafa", borderBottom: "1px solid #f0f0f0" }}>
                             <th style={{ padding: "6px 8px", textAlign: "left", fontWeight: "600", width: "5%", fontSize: "12px" }}>
-                              Image
+                              Gambar
                             </th>
                             <th style={{ padding: "6px 8px", textAlign: "left", fontWeight: "600", width: "25%", fontSize: "12px" }}>
-                              Name
+                              Nama
                             </th>
                             <th style={{ padding: "6px 8px", textAlign: "left", fontWeight: "600", width: "8%", fontSize: "12px" }}>
-                              Code
+                              Kode
                             </th>
                             <th style={{ padding: "6px 8px", textAlign: "right", fontWeight: "600", width: "12%", fontSize: "12px" }}>
-                              Price
+                              Harga
                             </th>
                             <th style={{ padding: "6px 8px", textAlign: "right", fontWeight: "600", width: "12%", fontSize: "12px" }}>
-                              Price Cut
+                              Potongan Harga
                             </th>
                             <th style={{ padding: "6px 8px", textAlign: "center", fontWeight: "600", width: "8%", fontSize: "12px" }}>
                               Rating
                             </th>
                             <th style={{ padding: "6px 8px", textAlign: "left", fontWeight: "600", width: "12%", fontSize: "12px" }}>
-                              Category
+                              Kategori
                             </th>
                             <th style={{ padding: "6px 8px", textAlign: "left", fontWeight: "600", width: "14%", fontSize: "12px" }}>
-                              Tags
+                              Tag
                             </th>
                             <th style={{ padding: "6px 8px", textAlign: "center", fontWeight: "600", width: "12%", fontSize: "12px" }}>
-                              Actions
+                              Aksi
                             </th>
                           </tr>
                         </thead>
@@ -331,7 +331,7 @@ const AdminPanel: React.FC<{
                                   </div>
                                 ) : (
                                   <Text type="secondary" style={{ fontSize: "10px" }}>
-                                    No discount
+                                    Tidak ada diskon
                                   </Text>
                                 )}
                               </td>
@@ -362,7 +362,7 @@ const AdminPanel: React.FC<{
                                   </Text>
                                 ) : (
                                   <Text type="secondary" style={{ fontSize: "10px", fontStyle: "italic" }}>
-                                    No category
+                                    Tanpa kategori
                                   </Text>
                                 )}
                               </td>
@@ -397,8 +397,8 @@ const AdminPanel: React.FC<{
                                   alignItems: "center"
                                 }}>
                                   <Button type="primary" size="small" icon={<EditOutlined />} onClick={() => handleEdit(item)} title="Edit" />
-                                  <Button type="default" size="small" icon={<CopyOutlined />} onClick={() => handleDuplicate(item)} title="Duplicate" />
-                                  <Button danger size="small" icon={<DeleteOutlined />} onClick={() => handleDeleteItem(item.id)} title="Delete" />
+                                  <Button type="default" size="small" icon={<CopyOutlined />} onClick={() => handleDuplicate(item)} title="Duplikat" />
+                                  <Button danger size="small" icon={<DeleteOutlined />} onClick={() => handleDeleteItem(item.id)} title="Hapus" />
                                 </div>
                               </td>
                             </tr>
@@ -412,13 +412,13 @@ const AdminPanel: React.FC<{
                     <div style={{ marginTop: "16px", display: "flex", justifyContent: "center", padding: "16px" }}>
                       <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                         <Button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
-                          Previous
+                          Sebelumnya
                         </Button>
                         <span style={{ padding: "0 16px", fontSize: "14px" }}>
-                          Page {currentPage} of {Math.ceil(totalItems / 20)}
+                          Halaman {currentPage} dari {Math.ceil(totalItems / 20)}
                         </span>
                         <Button disabled={!hasMore} onClick={() => setCurrentPage(currentPage + 1)}>
-                          Next
+                          Selanjutnya
                         </Button>
                       </div>
                     </div>
@@ -429,14 +429,14 @@ const AdminPanel: React.FC<{
           },
           {
             key: "categories",
-            label: "Category Management",
+            label: "Manajemen Kategori",
             children: (
               <CategoryManagement />
             ),
           },
           {
             key: "purchases",
-            label: "Purchase Management",
+            label: "Manajemen Pembelian",
             children: (
               <PurchaseTable
                 admin={admin}
@@ -446,7 +446,7 @@ const AdminPanel: React.FC<{
           },
           {
             key: "config",
-            label: "Site Configuration",
+            label: "Konfigurasi Halaman",
             children: (
               <SiteConfigPage />
             ),

@@ -19,7 +19,7 @@ const AdminLoginModal: React.FC<{
       form.resetFields();
       onClose();
     } catch (error) {
-      message.error("Login failed. Please check your credentials.");
+      message.error("Login gagal. Periksa username dan password Anda.");
     } finally {
       setLoading(false);
     }
@@ -27,7 +27,7 @@ const AdminLoginModal: React.FC<{
 
   return (
     <Modal
-      title="Admin Login"
+      title="Login Admin"
       open={visible}
       onCancel={onClose}
       footer={null}
@@ -37,16 +37,16 @@ const AdminLoginModal: React.FC<{
         <Form.Item
           name="username"
           label="Username"
-          rules={[{ required: true, message: "Please enter username" }]}
+          rules={[{ required: true, message: "Masukkan username" }]}
         >
-          <Input placeholder="Enter username" />
+          <Input placeholder="Masukkan username" />
         </Form.Item>
         <Form.Item
           name="password"
           label="Password"
-          rules={[{ required: true, message: "Please enter password" }]}
+          rules={[{ required: true, message: "Masukkan password" }]}
         >
-          <Input.Password placeholder="Enter password" />
+          <Input.Password placeholder="Masukkan password" />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading} block>

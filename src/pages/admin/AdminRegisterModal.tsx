@@ -15,7 +15,7 @@ const AdminRegisterModal: React.FC<{
     confirmPassword: string;
   }) => {
     if (values.password !== values.confirmPassword) {
-      message.error("Passwords do not match");
+      message.error("Password tidak cocok");
       return;
     }
 
@@ -24,9 +24,9 @@ const AdminRegisterModal: React.FC<{
       await onRegister(values.username, values.password);
       form.resetFields();
       onClose();
-      message.success("Admin account created successfully!");
+      message.success("Akun admin berhasil dibuat!");
     } catch (error) {
-      message.error("Registration failed. Please try again.");
+      message.error("Registrasi gagal. Silakan coba lagi.");
     } finally {
       setLoading(false);
     }
@@ -34,7 +34,7 @@ const AdminRegisterModal: React.FC<{
 
   return (
     <Modal
-      title="Create Admin Account"
+      title="Buat Akun Admin"
       open={visible}
       onCancel={onClose}
       footer={null}
@@ -44,27 +44,27 @@ const AdminRegisterModal: React.FC<{
         <Form.Item
           name="username"
           label="Username"
-          rules={[{ required: true, message: "Please enter username" }]}
+          rules={[{ required: true, message: "Masukkan username" }]}
         >
-          <Input placeholder="Enter username" />
+          <Input placeholder="Masukkan username" />
         </Form.Item>
         <Form.Item
           name="password"
           label="Password"
-          rules={[{ required: true, message: "Please enter password" }]}
+          rules={[{ required: true, message: "Masukkan password" }]}
         >
-          <Input.Password placeholder="Enter password" />
+          <Input.Password placeholder="Masukkan password" />
         </Form.Item>
         <Form.Item
           name="confirmPassword"
-          label="Confirm Password"
-          rules={[{ required: true, message: "Please confirm password" }]}
+          label="Konfirmasi Password"
+          rules={[{ required: true, message: "Konfirmasi password" }]}
         >
-          <Input.Password placeholder="Confirm password" />
+          <Input.Password placeholder="Konfirmasi password" />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading} block>
-            Create Admin Account
+            Buat Akun Admin
           </Button>
         </Form.Item>
       </Form>
