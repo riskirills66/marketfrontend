@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/admin", "destination": "/" },
+    { "source": "/admin/:path*", "destination": "/" },
+    { "source": "/cart", "destination": "/" },
+    { "source": "/purchase", "destination": "/" },
+    { "source": "/profile", "destination": "/" },
+    { "source": "/item/:id", "destination": "/" },
+    { "source": "/order/:code", "destination": "/" }
+  ]
+}
