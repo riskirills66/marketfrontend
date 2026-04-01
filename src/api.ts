@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Item, PurchaseRequest, PurchaseResponse, PurchaseDetails, Tag, ApiResponse, PurchaseSummary, PaginatedResponse, Admin, DestinationItem, ShippingOption, Category, SiteConfig, UpdateSiteConfigRequest } from './types';
 
 // Use relative URLs so it works with any domain
-const API_BASE_URL = 'http://localhost';
+const API_BASE_URL = '';
 
 const api = axios.create({
   baseURL: `${API_BASE_URL}/api`,
