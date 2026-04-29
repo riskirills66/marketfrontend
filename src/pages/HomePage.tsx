@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Empty, Input, Spin, Typography } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Item, Tag, Category } from "../types";
 import { apiClient } from "../api";
 import CartContext from "../contexts/AppCartContext";
@@ -39,6 +39,7 @@ const HomePage: React.FC<{
   const isClearingRef = React.useRef(false);
   const { addToCart } = React.useContext(CartContext);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const fetchItems = async (searchTerm?: string, isLoadMore = false) => {
     if (isLoadMore) {
@@ -119,10 +120,14 @@ const HomePage: React.FC<{
   }, []);
 
   useEffect(() => {
-    onTagsUpdate(selectedCategoryId);
-    if (selectedCategoryId !== null && selectedTags.length > 0) {
-      selectedTags.forEach((tag) => onTagToggle(tag));
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) {
+      setSelectedCategoryId(Number(categoryParam));
     }
+  }, []);
+
+  useEffect(() => {
+    onTagsUpdate(selectedCategoryId);
   }, [selectedCategoryId]);
 
   useEffect(() => {
@@ -136,6 +141,15 @@ const HomePage: React.FC<{
 
   const handleAddToCart = (item: Item) => {
     addToCart(item);
+  };
+
+  const handleCategorySelect = (categoryId: number | null) => {
+    setSelectedCategoryId(categoryId);
+    if (categoryId) {
+      setSearchParams({ category: categoryId.toString() });
+    } else {
+      setSearchParams({});
+    }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,6 +177,7 @@ const HomePage: React.FC<{
     setTotalItems(0);
     setHasMore(false);
     setSelectedCategoryId(null);
+    setSearchParams({});
     setShowSearchPage(false);
     fetchItems();
   };
@@ -267,13 +282,13 @@ const HomePage: React.FC<{
         </div>
       </div>
 
-      {categories.length > 0 && (
-        <CategoriesMenu
-          categories={categories}
-          selectedCategoryId={selectedCategoryId}
-          onCategorySelect={setSelectedCategoryId}
-        />
-      )}
+        {categories.length > 0 && (
+          <CategoriesMenu
+            categories={categories}
+            selectedCategoryId={selectedCategoryId}
+            onCategorySelect={handleCategorySelect}
+          />
+        )}
 
       <PopularTags
         popularTags={popularTags}

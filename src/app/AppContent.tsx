@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "antd";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
 import BottomFooter from "../components/layout/BottomFooter";
 import FloatingCartButton from "../components/FloatingCartButton";
@@ -10,6 +10,7 @@ import CartPage from "../pages/CartPage";
 import PurchasePage from "../pages/PurchasePage";
 import ProfilePage from "../pages/ProfilePage";
 import AdminApp from "../pages/admin/AdminApp";
+import NotFound from "../pages/NotFound";
 import MoreTagsModal from "../components/tags/MoreTagsModal";
 import CartContext from "../contexts/AppCartContext";
 import UserContext from "../contexts/AppUserContext";
@@ -18,6 +19,28 @@ import { getCartFromCookie, saveCartToCookie, clearCartCookie } from "../utils/c
 import { apiClient } from "../api";
 
 const { Content } = Layout;
+
+const TagPageWrapper: React.FC<{
+  popularTags: Tag[];
+  onTagToggle: (tag: string) => void;
+  onShowMoreTags: () => void;
+  allTags: Tag[];
+  onTagsUpdate: (categoryId: number | null) => Promise<void>;
+}> = ({ popularTags, onTagToggle, onShowMoreTags, allTags, onTagsUpdate }) => {
+  const { tagName } = useParams<{ tagName: string }>();
+  const decodedTag = decodeURIComponent(tagName || "");
+
+  return (
+    <HomePage
+      selectedTags={decodedTag ? [decodedTag] : []}
+      popularTags={popularTags}
+      onTagToggle={onTagToggle}
+      onShowMoreTags={onShowMoreTags}
+      allTags={allTags}
+      onTagsUpdate={onTagsUpdate}
+    />
+  );
+};
 
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
@@ -94,18 +117,27 @@ const AppContent: React.FC = () => {
   };
 
   const handleTagToggle = React.useCallback((tagName: string) => {
-    setSelectedTags((prev) => {
-      if (prev.includes(tagName)) {
-        return prev.filter((tag) => tag !== tagName);
+    const currentPath = location.pathname;
+    const currentTagMatch = currentPath.match(/^\/tag\/(.+)$/);
+
+    if (currentTagMatch) {
+      const currentTag = decodeURIComponent(currentTagMatch[1]);
+      if (currentTag === tagName) {
+        navigate("/");
       } else {
-        return [...prev, tagName];
+        navigate(`/tag/${encodeURIComponent(tagName)}`);
       }
-    });
-  }, []);
+    } else {
+      navigate(`/tag/${encodeURIComponent(tagName)}`);
+    }
+  }, [location.pathname, navigate]);
 
   const handleClearSelection = React.useCallback(() => {
     setSelectedTags([]);
-  }, []);
+    if (location.pathname.startsWith("/tag/")) {
+      navigate("/");
+    }
+  }, [location.pathname, navigate]);
 
   const handleShowMoreTags = React.useCallback(() => {
     setMoreTagsModalVisible(true);
@@ -135,11 +167,13 @@ const AppContent: React.FC = () => {
           <Content className={`modern-content ${isCartPage || isPurchasePage ? "with-footer" : ""}`}>
             <Routes>
               <Route path="/" element={<HomePage selectedTags={selectedTags} popularTags={popularTags} onTagToggle={handleTagToggle} onShowMoreTags={handleShowMoreTags} allTags={tags} onTagsUpdate={fetchTags} />} />
+              <Route path="/tag/:tagName" element={<TagPageWrapper popularTags={popularTags} onTagToggle={handleTagToggle} onShowMoreTags={handleShowMoreTags} allTags={tags} onTagsUpdate={fetchTags} />} />
               <Route path="/item/:id" element={<ItemDetailPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/purchase" element={<PurchasePage />} />
               <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/admin" element={<AdminApp />} />
+              <Route path="/admin/*" element={<AdminApp />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Content>
 
@@ -147,7 +181,7 @@ const AppContent: React.FC = () => {
             <BottomFooter cart={cart} onCheckout={handleCheckout} />
           )}
           
-          {location.pathname === "/" && (
+          {(location.pathname === "/" || location.pathname.startsWith("/tag/")) && (
             <FloatingCartButton 
               cartItemCount={cartItemCount} 
               onCartClick={() => navigate("/cart")} 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Badge, Button, Card, Col, Empty, Input, Row, Select, Spin, Tabs, Tag as AntTag, Typography, message, Image } from "antd";
 import { SearchOutlined, StarOutlined, EditOutlined, CopyOutlined, DeleteOutlined } from "@ant-design/icons";
+import { useParams, useNavigate } from "react-router-dom";
 import { Admin, Item, PurchaseSummary, Category } from "../../types";
 import { apiClient } from "../../api";
 import AddItemModal from "./modals/AddItemModal.tsx";
@@ -31,9 +32,16 @@ const AdminPanel: React.FC<{
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
 
+  const params = useParams();
+  const tab = params['*'] || 'items';
+  const navigate = useNavigate();
   const [selectedPurchase, setSelectedPurchase] = useState<PurchaseSummary | null>(null);
   const [purchaseDetailsVisible, setPurchaseDetailsVisible] = useState(false);
-  const [activeTab, setActiveTab] = useState("items");
+  const [activeTab, setActiveTab] = useState(tab || "items");
+
+  useEffect(() => {
+    setActiveTab(tab);
+  }, [tab]);
 
   const fetchItems = async (searchTerm?: string) => {
     setLoading(true);
@@ -189,7 +197,10 @@ const AdminPanel: React.FC<{
 
       <Tabs
         activeKey={activeTab}
-        onChange={setActiveTab}
+        onChange={(key) => {
+          setActiveTab(key);
+          navigate(`/admin/${key}`);
+        }}
         items={[
           {
             key: "items",
